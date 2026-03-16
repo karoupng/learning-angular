@@ -1,4 +1,7 @@
 import { Component } from '@angular/core';
+import { UsuarioService } from '../../services/usuario.service';
+
+
 
 @Component({
   selector: 'app-topo',
@@ -6,4 +9,6 @@ import { Component } from '@angular/core';
   templateUrl: './topo.html',
   styleUrl: './topo.css',
 })
-export class Topo {}
+export class Topo {
+  constructor(public usuarioserv: UsuarioService){}
+}
