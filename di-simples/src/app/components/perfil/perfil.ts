@@ -21,6 +21,9 @@ export class Perfil {
   ngOnInit(){
     this.nomeExibido = this.usuarioServ.nome;
   }
+  mudarNome(){
+    this.usuarioServ.alterarNome('Karolaine');
+  }
 
 
 
