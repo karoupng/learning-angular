@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable , inject} from '@angular/core';
 
 // providedIn: 'root   significa: crie uma única cópia deste serviço e deixe-a disponível na raiz do projeto (root). Dessa forma a informação é compartilhada com todos os componentes.
 @Injectable({

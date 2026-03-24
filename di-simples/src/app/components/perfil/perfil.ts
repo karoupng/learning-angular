@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { UsuarioService } from '../../services/usuario.service';
 
 @Component({
@@ -8,5 +8,20 @@ import { UsuarioService } from '../../services/usuario.service';
   styleUrl: './perfil.css',
 })
 export class Perfil {
-  constructor(public usuarioserv: UsuarioService) {}
+  // constructor(public usuarioserv: UsuarioService) {} - versão antiga - forma básica sem segurança de dados
+
+  //injeção moderna abaixo com o serviço privado
+
+  private usuarioServ = inject(UsuarioService);
+
+  //criando uma variável pública para o HTML ler
+
+  nomeExibido: string = '';
+
+  ngOnInit(){
+    this.nomeExibido = this.usuarioServ.nome;
+  }
+
+
+
 }
