@@ -1,59 +1,34 @@
-# DiSimples
+# Arquitetura Publisher-Subscriber no Angular
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.2.2.
 
-## Development server
+Abaixo está o mapeamento exato do fluxo de dados, dividido em 6 etapas arquiteturais:
 
-To start a local development server, run:
+### 1. Bootstrap (Inicialização)
+O Angular prepara o terreno antes da interface gráfica ser montada.
+* **Localização:** `usuario.service.ts`
+* **Ação:** A instrução `providedIn: 'root'` garante que o serviço seja instanciado como um **Singleton** (uma cópia única compartilhada por toda a aplicação).
 
-```bash
-ng serve
-```
+### 2. Subscription (Inscrição)
+O componente ouvinte "assina" o canal de comunicação para receber atualizações futuras.
+* **Localização:** `topo.ts` (dentro do `ngOnInit`)
+* **Ação:** O componente Topo entrega uma instrução de *callback* através do comando `this.usuarioServ.nomeAtualizado.subscribe(novoNomeQueChegou => ...)`. É uma ordem agendada: "Ao surgirem novidades, rode a função dentro das chaves".
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+### 3. Trigger (Gatilho)
+O usuário interage com a interface, iniciando a reação em cadeia.
+* **Localização:** `perfil.html` e `perfil.ts`
+* **Ação:** O usuário clica no botão, acionando a função `mudarNome()`. O componente Perfil percebe a ação e envia a nova *string* ('Karolaine') em direção ao serviço.
 
-## Code scaffolding
+### 4. Emission (Emissão)
+O Serviço recebe o novo dado e o injeta no canal de transmissão.
+* **Localização:** `usuario.service.ts` (dentro da função `alterarNome`)
+* **Ação:** O método `.next(novoNome)` é acionado. Ele pega a *string* 'Karolaine' que chegou do perfil e a empurra com força para dentro do nosso observável (`nomeAtualizado`).
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+### 5. Broadcast (Transmissão)
+A distribuição da informação ocorre nos bastidores de forma reativa.
+* **Localização:** Motor interno do `Subject` (RxJS).
+* **Ação:** O `Subject` transmite o novo dado simultaneamente para todos os componentes que registraram interesse (que estão na sua "lista" de inscritos do Passo 2).
 
-```bash
-ng generate component component-name
-```
-
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
-
-```bash
-ng generate --help
-```
-
-## Building
-
-To build the project run:
-
-```bash
-ng build
-```
-
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+### 6. Change Detection (Detecção de Mudança)
+O ciclo se fecha com a atualização visual na tela do usuário.
+* **Localização:** `topo.ts` e `topo.html`
+* **Ação:** O *subscribe* é ativado, executando `this.nomeNoTopo = novoNomeQueChegou;`. A variável muda na memória, o Angular percebe a alteração instantaneamente e atualiza o HTML (`{{ nomeNoTopo }}`).
