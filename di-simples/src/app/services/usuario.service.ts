@@ -12,6 +12,10 @@ export class UsuarioService {
   nomeAtualizado = new Subject<string>();
 
   alterarNome(novoNome: string) {
+    if (novoNome.toLocaleLowerCase() === 'admin'){
+      //Lançamento de erro manual
+      throw new Error('O nome "Admin" é reservado pelo sistema!');
+    }
     this.nome = novoNome;
 
     this.nomeAtualizado.next(novoNome);

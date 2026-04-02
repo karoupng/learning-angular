@@ -1,7 +1,9 @@
 <h3>Configurações do Perfil</h3>
 
-<p>
-  O nome salvo no serviço é <strong> {{nomeExibido}}</strong>
-</p>
+<p>Digite o novo nome:</p>
 
-<button (click)="mudarNome()">Mudar nome para Karolaine</button>
+<input type="text" [formControl]="nomeInput" placeholder="Digite aqui...">
+
+<button (click)="mudarNome()">Atualizar nome Global</button>
+
+<p>Nome atual no serviço: <strong>{{nomeExibido}}</strong></p>
